@@ -8,21 +8,31 @@ import java.awt.Rectangle;
 public class SnakeBody {
     private int horizontal;
     private int vertical;
-    private boolean available = false;
+    private int position = 0;
     static private final int SNAKESIZE = 20;
-
-        
+    
+    private boolean available = false;
+    private String orientation;
+    
+    SnakeTail tail = new SnakeTail();
+   
     protected void paint(Graphics2D g2d) {
-        g2d.setColor(Color.green);
-        g2d.fillRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
+        g2d.setColor(Color.white);
+        
+        if(SnakeGame.getScore() != position + 1) {
+            g2d.fillRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
+            g2d.setColor(Color.black);
+            g2d.drawRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
+        } else {
+            tail.setOrientation(orientation);
+            tail.setHorizontal(horizontal);
+            tail.setVertical(vertical);
+            tail.paint(g2d);
+        }
     }
     
     protected boolean getAvailability() {
         return available;
-    }
-    
-    protected void setAvailability(boolean availability) {
-        available = availability;
     }
     
     protected int getHorizontal() {
@@ -39,6 +49,22 @@ public class SnakeBody {
     
     protected void setVertical(int vertical) {
         this.vertical = vertical;
+    }
+    
+    protected void setPosition(int position) {
+        this.position = position;
+    }
+    
+    protected void setAvailability(boolean availability) {
+        available = availability;
+    }
+    
+    protected void setOrientation(String orientation) {
+        this.orientation = orientation;
+    }
+    
+    protected String getOrientation() {
+        return orientation;
     }
      
     protected Rectangle getBounds() { 

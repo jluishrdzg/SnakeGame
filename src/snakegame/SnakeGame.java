@@ -23,7 +23,7 @@ import javax.swing.JRadioButtonMenuItem;
 public class SnakeGame extends JPanel implements KeyListener, ActionListener {
     static World world = new World();
     static Food food = new Food();
-    static SnakeHead snake = new SnakeHead();
+    static SnakeHead snakeHead = new SnakeHead();
     static SnakeBody [] fullBody = new SnakeBody [100];
     
     static public boolean downState = false;
@@ -56,12 +56,12 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
         world.paint(g);
         world.paintSpaceMessage(g, isStarted);
         
-        g2d.setColor(Color.white);
+        g2d.setColor(Color.black);
         g2d.setFont(new Font("Verdana", Font.BOLD, 30));
         g2d.drawString("SCORE" , 440, 50); 
         g2d.drawString(String.valueOf(score), 490, 100); 
         
-        snake.paint(g2d);
+        snakeHead.paint(g2d);
         paintSnakeBody(g2d);
              
         if(snakeEeatenFood()) {
@@ -81,17 +81,32 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
         
         while(counter >= 0) {       
             if(counter == 0) {
-                fullBody[counter].setHorizontal(snake.getHorizontal());
-                fullBody[counter].setVertical(snake.getVertical());
+                fullBody[counter].setHorizontal(snakeHead.getHorizontal());
+                fullBody[counter].setVertical(snakeHead.getVertical());
+                fullBody[counter].setOrientation(getOrientation());
             } else {
                 fullBody[counter].setHorizontal(fullBody[counter-1].getHorizontal());
                 fullBody[counter].setVertical(fullBody[counter-1].getVertical());
+                fullBody[counter].setOrientation(fullBody[counter-1].getOrientation());
             } 
-            counter--;
+            fullBody[counter].setPosition(counter);
+            counter--;  
         }
     }
     public static int getScore() {
         return score;
+    }
+    
+    public static String getOrientation() {
+        if(upState)
+            return "up";
+        if(rightState)
+            return "right";
+        if(downState)
+            return "down";
+        if(leftState)
+            return "left";
+        return "noOrientation";
     }
     
     public static void paintSnakeBody(Graphics2D g2d) {  
@@ -103,12 +118,12 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
     }
     
     public static boolean snakeEeatenFood() {
-        return snake.getBounds().intersects(food.getBounds());
+        return snakeHead.getBounds().intersects(food.getBounds());
     }
     
     public static boolean isHeadCrashingBody(SnakeGame game) {
         for(int i = score; i > 0; i--) {
-            if(snake.getBounds().intersects(fullBody[i].getBounds()) && 1 != 0) {
+            if(snakeHead.getBounds().intersects(fullBody[i].getBounds()) && 1 != 0) {
                 return true;
             } 
         }
@@ -116,19 +131,19 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
     }
     
     public static boolean isRightCrashing(SnakeGame game) {
-        return snake.getHorizontal() > 401 - 20;
+        return snakeHead.getHorizontal() > 401 - 20;
     }
     
     public static boolean isBotCrashing(SnakeGame game) {
-        return snake.getVertical() > 661 - 20;
+        return snakeHead.getVertical() > 661 - 20;
     }
  
     public static boolean isLeftCrashing(SnakeGame game) {
-        return snake.getHorizontal() < -1;
+        return snakeHead.getHorizontal() < -1;
     }
     
     public static boolean isTopCrashing(SnakeGame game) {
-        return snake.getVertical() < -1;
+        return snakeHead.getVertical() < -1;
     }
     
     public static void changeMoveState(boolean upState, boolean rightState, 
@@ -140,7 +155,7 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
     }
     
     public static void cleanWorld() {
-        snake.resetPosition();
+        snakeHead.resetPosition();
 
         for(int i = 0; i < fullBody.length; i++) {
             fullBody[i] = new SnakeBody();
@@ -216,16 +231,16 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
              game.repaint();
                         
             if(upState) 
-                snake.moveUp();
+                snakeHead.moveUp();
  
             if(rightState) 
-                snake.moveRight();
+                snakeHead.moveRight();
             
             if(downState) 
-                snake.moveDown();           
+                snakeHead.moveDown();           
             
             if(leftState) 
-                snake.moveLeft();            
+                snakeHead.moveLeft();            
                     
             if(isRightCrashing(game) || isBotCrashing(game) ||
                     isTopCrashing(game) || isLeftCrashing(game) ||

@@ -19,15 +19,16 @@ public class SnakeHead {
     }
     
     protected void paint(Graphics2D g2d) {   
-        g2d.setColor(Color.green);
-        g2d.fillRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
+        g2d.setColor(Color.white);
+        g2d.fillOval(horizontal, vertical, SNAKESIZE, SNAKESIZE);
+        g2d.setColor(Color.black);
+        g2d.drawOval(horizontal, vertical, SNAKESIZE, SNAKESIZE);
         
         if(!SnakeGame.isStarted) {
             g2d.setColor(Color.black);   
             g2d.fillRect(horizontal + 2, vertical + 6, 6, 2);
             g2d.fillRect(horizontal + 12, vertical + 6, 6, 2);
         }
-
         
         if(SnakeGame.upState)
             paintUptHead(g2d);
@@ -40,7 +41,12 @@ public class SnakeHead {
     }
     
     protected void paintUptHead(Graphics2D g2d) {
+        g2d.setColor(Color.white);  
+        g2d.fillRect(horizontal , vertical + 10, SNAKESIZE, SNAKESIZE / 2);
         g2d.setColor(Color.black);   
+        g2d.drawLine(horizontal, vertical + 10, horizontal, vertical + 20);
+        g2d.drawLine(horizontal + 20, vertical + 10, horizontal+ 20, vertical + 20);
+        g2d.drawLine(horizontal, vertical + 20, horizontal+ 20, vertical + 20);
         g2d.fillRect(horizontal + 5, vertical + 5, 3, 5);
         g2d.fillRect(horizontal + 11, vertical + 5, 3, 5);
         g2d.setColor(Color.red);
@@ -50,7 +56,12 @@ public class SnakeHead {
     }
     
     protected void paintRightHead(Graphics2D g2d) {
-        g2d.setColor(Color.black);   
+        g2d.setColor(Color.white);  
+        g2d.fillRect(horizontal , vertical, SNAKESIZE / 2, SNAKESIZE);
+        g2d.setColor(Color.black);
+        g2d.drawLine(horizontal, vertical, horizontal + 10, vertical);
+        g2d.drawLine(horizontal, vertical + 20, horizontal + 10, vertical + 20);
+        g2d.drawLine(horizontal, vertical, horizontal, vertical + 20);
         g2d.fillRect(horizontal + 10, vertical + 5, 5, 3);
         g2d.fillRect(horizontal + 10, vertical + 11, 5, 3);
         g2d.setColor(Color.red);
@@ -60,7 +71,12 @@ public class SnakeHead {
     }
     
     protected void paintDownHead(Graphics2D g2d) {
-        g2d.setColor(Color.black);   
+        g2d.setColor(Color.white);  
+        g2d.fillRect(horizontal , vertical, SNAKESIZE, SNAKESIZE / 2);
+        g2d.setColor(Color.black);
+        g2d.drawLine(horizontal, vertical, horizontal, vertical + 10);
+        g2d.drawLine(horizontal + 20, vertical, horizontal + 20, vertical + 10);
+        g2d.drawLine(horizontal, vertical, horizontal + 20, vertical);
         g2d.fillRect(horizontal + 5, vertical + 10, 3, 5);
         g2d.fillRect(horizontal + 11, vertical + 10, 3, 5);
         g2d.setColor(Color.red);
@@ -70,7 +86,12 @@ public class SnakeHead {
     }
     
     protected void paintLeftHead(Graphics2D g2d) {
-        g2d.setColor(Color.black);   
+        g2d.setColor(Color.white);  
+        g2d.fillRect(horizontal + 10 , vertical, SNAKESIZE / 2, SNAKESIZE);
+        g2d.setColor(Color.black);
+        g2d.drawLine(horizontal + 10, vertical, horizontal + 20, vertical);
+        g2d.drawLine(horizontal + 10, vertical + 20, horizontal + 20, vertical + 20);
+        g2d.drawLine(horizontal + 20, vertical, horizontal + 20, vertical + 20);
         g2d.fillRect(horizontal + 5, vertical + 5, 5, 3);
         g2d.fillRect(horizontal + 5, vertical + 11, 5, 3);
         g2d.setColor(Color.red);
