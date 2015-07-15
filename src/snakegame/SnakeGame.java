@@ -51,8 +51,7 @@ public class SnakeGame extends JPanel implements KeyListener, ActionListener {
         
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        world.paint(g);
-        world.paintSpaceMessage(g, isStarted);
+        world.paint(g2d);
         
         g2d.setColor(Color.black);
         g2d.setFont(new Font("Verdana", Font.BOLD, 30));
