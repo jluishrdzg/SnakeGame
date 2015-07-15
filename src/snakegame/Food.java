@@ -15,7 +15,7 @@ public class Food {
      
     public void paint(Graphics2D g2d) {
         g2d.setColor(Color.black);
-        g2d.fillOval(horizontal, vertical, FOODSIZE, FOODSIZE);
+        g2d.drawOval(horizontal, vertical, FOODSIZE, FOODSIZE);
     }
     // generates a new postion for the food
     protected void newPosition() {

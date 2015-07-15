@@ -13,22 +13,13 @@ public class SnakeBody {
     
     private boolean available = false;
     private String orientation;
-    
-    SnakeTail tail = new SnakeTail();
-   
+  
     protected void paint(Graphics2D g2d) {
         g2d.setColor(Color.white);
+        g2d.fillRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
+        g2d.setColor(Color.black);
+        g2d.drawRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
         
-        if(SnakeGame.getScore() != position + 1) {
-            g2d.fillRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
-            g2d.setColor(Color.black);
-            g2d.drawRect(horizontal, vertical, SNAKESIZE, SNAKESIZE);
-        } else {
-            tail.setOrientation(orientation);
-            tail.setHorizontal(horizontal);
-            tail.setVertical(vertical);
-            tail.paint(g2d);
-        }
     }
     
     protected boolean getAvailability() {

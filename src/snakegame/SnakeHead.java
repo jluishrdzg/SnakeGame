@@ -28,6 +28,13 @@ public class SnakeHead {
             g2d.setColor(Color.black);   
             g2d.fillRect(horizontal + 2, vertical + 6, 6, 2);
             g2d.fillRect(horizontal + 12, vertical + 6, 6, 2);
+            
+            g2d.setColor(Color.white);  
+            g2d.fillRect(horizontal , vertical + 10, SNAKESIZE, SNAKESIZE / 2);
+            g2d.setColor(Color.black);  
+            g2d.drawLine(horizontal, vertical + 10, horizontal, vertical + 20);
+            g2d.drawLine(horizontal + 20, vertical + 10, horizontal+ 20, vertical + 20);
+            g2d.drawLine(horizontal, vertical + 20, horizontal+ 20, vertical + 20); 
         }
         
         if(SnakeGame.upState)
