@@ -35,7 +35,7 @@ public class Food {
         
         // if the food appears on the snake, get other position   
         for(int i = game.getScore(); i >= 0; i--) {
-            if(game.fullBody[i].getBounds().intersects(this.getBounds())) {
+            if(game.snakeBody[i].getBounds().intersects(this.getBounds())) {
                 newPosition();
             } 
         }

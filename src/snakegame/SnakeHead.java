@@ -37,14 +37,10 @@ public class SnakeHead {
             g2d.drawLine(horizontal, vertical + 20, horizontal+ 20, vertical + 20); 
         }
         
-        if(SnakeGame.upState)
-            paintUptHead(g2d);
-        if(SnakeGame.rightState)
-            paintRightHead(g2d);
-        if(SnakeGame.downState)
-            paintDownHead(g2d);
-        if(SnakeGame.leftState)
-            paintLeftHead(g2d);
+        if(SnakeGame.upState) paintUptHead(g2d);
+        if(SnakeGame.rightState) paintRightHead(g2d);
+        if(SnakeGame.downState) paintDownHead(g2d);
+        if(SnakeGame.leftState) paintLeftHead(g2d);
     }
     
     protected void paintUptHead(Graphics2D g2d) {

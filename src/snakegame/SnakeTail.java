@@ -17,14 +17,10 @@ public class SnakeTail {
     public void paint(Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
         
-        if(orientation.compareTo("up") == 0)
-            setUpPoints(g2d);
-        if(orientation.compareTo("right") == 0)
-            setRightPoints(g2d);
-        if(orientation.compareTo("down") == 0)
-            paintDownTail(g2d);
-        if(orientation.compareTo("left") == 0)
-            setLeftPoints(g2d);
+        if(orientation.compareTo("up") == 0) setUpPoints(g2d);
+        if(orientation.compareTo("right") == 0) setRightPoints(g2d);
+        if(orientation.compareTo("down") == 0) paintDownTail(g2d);
+        if(orientation.compareTo("left") == 0) setLeftPoints(g2d);
 
         g2d.fillPolygon(xPoints, yPoints, 3);
         g2d.setColor(Color.black);
@@ -34,14 +30,10 @@ public class SnakeTail {
     public void paintWhitoutBody(Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
         
-        if(orientation.compareTo("up") == 0)
-            setUpPoints(g2d);
-        if(orientation.compareTo("right") == 0)
-            setRightPoints(g2d);
-        if(orientation.compareTo("down") == 0)
-            paintDownTail(g2d);
-        if(orientation.compareTo("left") == 0)
-            setLeftPoints(g2d);
+        if(orientation.compareTo("up") == 0) setUpPoints(g2d);
+        if(orientation.compareTo("right") == 0) setRightPoints(g2d);
+        if(orientation.compareTo("down") == 0) paintDownTail(g2d);
+        if(orientation.compareTo("left") == 0) setLeftPoints(g2d);
         
         g2d.fillPolygon(xPoints, yPoints, 3);
         g2d.setColor(Color.black);
@@ -56,9 +48,8 @@ public class SnakeTail {
         xPoints[2] = horizontal + 10;
         yPoints[2] = vertical + 20;
         
-        for (int i = 0; i < yPoints.length; i++) {
+        for (int i = 0; i < yPoints.length; i++)
             yPoints[i] = yPoints[i] + 20;
-        }
     }
 
     private void setRightPoints(Graphics2D g2d) {
@@ -69,9 +60,8 @@ public class SnakeTail {
         xPoints[2] = horizontal;
         yPoints[2] = vertical + 10;
         
-        for (int i = 0; i < xPoints.length; i++) {
+        for (int i = 0; i < xPoints.length; i++)
             xPoints[i] = xPoints[i] - 20;
-        }
     }
 
     private void paintDownTail(Graphics2D g2d) {
@@ -82,9 +72,8 @@ public class SnakeTail {
         xPoints[2] = horizontal + 10;
         yPoints[2] = vertical;
         
-        for (int i = 0; i < yPoints.length; i++) {
-            yPoints[i] = yPoints[i] - 20;
-        }
+        for (int i = 0; i < yPoints.length; i++) 
+            yPoints[i] = yPoints[i] - 20;  
     }
 
     private void setLeftPoints(Graphics2D g2d) {
@@ -95,9 +84,8 @@ public class SnakeTail {
         xPoints[2] = horizontal + 20;
         yPoints[2] = vertical + 10;
         
-        for (int i = 0; i < xPoints.length; i++) {
+        for (int i = 0; i < xPoints.length; i++)
             xPoints[i] = xPoints[i] + 20;
-        }
     }
     
     public void setHorizontal(int horizontal) {

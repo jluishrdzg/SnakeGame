@@ -8,7 +8,6 @@ import java.awt.Rectangle;
 public class SnakeBody {
     private int horizontal;
     private int vertical;
-    private int position = 0;
     static private final int SNAKESIZE = 20;
     
     private boolean available = false;
@@ -41,11 +40,7 @@ public class SnakeBody {
     protected void setVertical(int vertical) {
         this.vertical = vertical;
     }
-    
-    protected void setPosition(int position) {
-        this.position = position;
-    }
-    
+      
     protected void setAvailability(boolean availability) {
         available = availability;
     }
