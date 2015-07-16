@@ -1,17 +1,17 @@
 package snakegame;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class SnakeGame extends JPanel implements KeyListener {
+public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     static World world = new World();
     static Food food = new Food();
     static SnakeHead snakeHead = new SnakeHead();
@@ -22,7 +22,12 @@ public class SnakeGame extends JPanel implements KeyListener {
     static public boolean upState = false;
     static public boolean rightState = false;
     static public boolean leftState = false;
+    
     static public boolean isStarted = false;
+    static public boolean isCrashed = false;
+    
+    static public boolean isByLevels = true;
+    static public boolean isByScore = false;
     
     static private final int SPACEKEYCODE = 32;
     static private final int UPKEYCODE = 38;
@@ -31,8 +36,13 @@ public class SnakeGame extends JPanel implements KeyListener {
     static private final int LEFTKEYCODE = 37;
     
     static private int score = 0;
-    static private int counter = 0;
     static private int speed = 75;
+    static private int highScore = 0;
+    static private int lives = 5;
+    static private int counter = 0;
+    static private int currentWorld = 1;
+    static private int restOfFood = 0;
+
 
     @Override
     public void paint(Graphics g) {
@@ -40,13 +50,8 @@ public class SnakeGame extends JPanel implements KeyListener {
         
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
         world.paint(g2d);
-        
-        g2d.setColor(Color.black);
-        g2d.setFont(new Font("Verdana", Font.BOLD, 30));
-        g2d.drawString("SCORE" , 440, 50); 
-        g2d.drawString(String.valueOf(score), 490, 100); 
-        
         snakeHead.paint(g2d);
         paintSnakeTail(g2d);
         paintSnakeBody(g2d);
@@ -109,6 +114,26 @@ public class SnakeGame extends JPanel implements KeyListener {
         return score;
     }
     
+    public static int getHighScore() {
+        return highScore;
+    }
+    
+    private static void setHighScore(int score) {
+        if(score > highScore) highScore = score;
+    }
+    
+    public static int getLives() {
+        return lives;
+    }
+    
+    public static int getCurrentWorld() {
+        return currentWorld;
+    }
+    
+    public static int getRestOfFood() {
+        return restOfFood;
+    }
+    
     public static String getOrientation() {
         if(upState)  return "up";
         if(rightState) return "right";
@@ -169,6 +194,8 @@ public class SnakeGame extends JPanel implements KeyListener {
 
         score = 0;
         isStarted = false;
+        lives--;
+        isCrashed = true;
     }
       
     public static void  main(String[] args) throws InterruptedException {
@@ -176,6 +203,7 @@ public class SnakeGame extends JPanel implements KeyListener {
         SnakeGame game = new SnakeGame();
         
         frame.addKeyListener(game);
+        frame.addMouseListener(game);
         frame.add(game);
         frame.setSize(602, 690);
         frame.setVisible(true);
@@ -188,20 +216,20 @@ public class SnakeGame extends JPanel implements KeyListener {
             snakeBody[i] = new SnakeBody();
        
         while(true) {
-             game.repaint();
-                        
+            game.repaint();
+
             if(upState) snakeHead.moveUp();
             if(rightState) snakeHead.moveRight();           
             if(downState) snakeHead.moveDown();                
             if(leftState) snakeHead.moveLeft();            
-                    
+
             if(isRightCrashing() || isBotCrashing() ||
                     isTopCrashing() || isLeftCrashing() ||
                     isHeadCrashingBody() || isHeadCrashingTail()) {
-                JOptionPane.showMessageDialog(game, "Game Over");
+                //JOptionPane.showMessageDialog(game, "Game Over");
                 cleanWorld();
             }
-
+            setHighScore(getScore());
             Thread.sleep(speed);
         }
     } 
@@ -227,14 +255,49 @@ public class SnakeGame extends JPanel implements KeyListener {
                     changeMoveState(false, false, false, true);
         }
         
-        if(e.getKeyCode() == SPACEKEYCODE) 
-            if(!isStarted) changeMoveState(true, false, false, false);
-            isStarted = true;       
+        if(e.getKeyCode() == SPACEKEYCODE) {
+            if(!isByLevels && !isByScore) {
+                JOptionPane.showMessageDialog(this, "choose a type of game");
+                return;
+            }
+
+            if(!isStarted) {
+                changeMoveState(true, false, false, false);
+                isStarted = true;   
+            }
+        }
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int x=e.getX();
+        int y=e.getY();
+        
+        if(x >= 450 && x <= 465 && y >= 288 && y <= 303) {
+            isByLevels = true;
+            isByScore = false;
+        }
+        if(x >= 450 && x <= 465 && y >= 313 && y <= 326) {
+            isByScore = true;
+            isByLevels = false;
+        }       
+    }
+    
     @Override
     public void keyReleased(KeyEvent e) {}
     
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }
