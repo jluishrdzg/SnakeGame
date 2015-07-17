@@ -66,6 +66,7 @@ public class World {
         if(SnakeGame.isByLevels)
         {
             g2d.drawString("Lives:" , 420, 208); 
+            g2d.setColor(Color.red);  
 
             for(int i = SnakeGame.getLives(); i > 0 ; i--) {
                 int margin = 20 * i;

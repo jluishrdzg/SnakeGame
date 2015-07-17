@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     static World world = new World();
     static Food food = new Food();
+    static Lives live = new Lives();
     static SnakeHead snakeHead = new SnakeHead();
     static SnakeBody [] snakeBody = new SnakeBody [100];
     static SnakeTail snakeTail = new SnakeTail();
@@ -28,6 +29,8 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     
     static public boolean isByLevels = true;
     static public boolean isByScore = false;
+    
+    static public boolean isLiveShown = false;
     
     static private final int SPACEKEYCODE = 32;
     static private final int UPKEYCODE = 38;
@@ -61,7 +64,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         snakeHead.paint(g2d);
         paintSnakeTail(g2d);
         paintSnakeBody(g2d);
-        
+        if(isByLevels) paintLive(g2d);
         if(snakeEeatenFood()) {
             food.newPosition();
             if(isByLevels) {
@@ -119,6 +122,18 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
             counter--;  
         }
     }
+    
+    public static void paintLive(Graphics2D g2d) {
+        if(isLiveShown) live.paint(g2d);
+        else live.getCoordinates();
+        
+        if(snakeTakenLive()) {
+            if(lives != 5) lives++;
+            isLiveShown = false;
+            live.resetCoordinates();
+        }
+    }
+    
     public static int getScore() {
         return score;
     }
@@ -156,6 +171,10 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     
     public static boolean snakeEeatenFood() {
         return snakeHead.getBounds().intersects(food.getBounds());
+    }
+    
+    public static boolean snakeTakenLive() {
+         return snakeHead.getBounds().intersects(live.getBounds());
     }
     
     public static boolean isHeadCrashingBody() {
@@ -234,10 +253,8 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         while(true) {
             game.repaint();
             
-            if(!isStarted) {
-                restOfFood =  level * 2 + 8;
-            }
-            
+            if(!isStarted) restOfFood =  level * 2 + 8;
+ 
             if (restOfFood == 0) {
                 cleanWorld();
                 level++;
@@ -252,7 +269,6 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
             if(isRightCrashing() || isBotCrashing() ||
                     isTopCrashing() || isLeftCrashing() ||
                     isHeadCrashingBody() || isHeadCrashingTail()) {
-                //JOptionPane.showMessageDialog(game, "Game Over");
                 if(isByLevels) lives--;
                 cleanWorld();
             }
@@ -263,7 +279,6 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
         if(isStarted) {
             if(e.getKeyCode() == UPKEYCODE || e.getKeyCode() == WCHARKEYCODE) 
                 if(!upState && !downState) 
