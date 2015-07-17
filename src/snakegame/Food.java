@@ -7,7 +7,6 @@ import java.util.Random;
 
 public class Food {
     private Random random = new Random();
-    private SnakeGame game;
     
     private int horizontal = random.nextInt(381) + 1;
     private int vertical = random.nextInt(641) + 1;
@@ -34,8 +33,8 @@ public class Food {
         this.vertical = randomVertical;
         
         // if the food appears on the snake, get other position   
-        for(int i = game.getScore(); i >= 0; i--) {
-            if(game.snakeBody[i].getBounds().intersects(this.getBounds())) {
+        for(int i = SnakeGame.getScore(); i >= 0; i--) {
+            if(SnakeGame.snakeBody[i].getBounds().intersects(this.getBounds())) {
                 newPosition();
             } 
         }
