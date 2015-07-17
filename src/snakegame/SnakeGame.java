@@ -34,13 +34,19 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     static private final int RIGHTKEYCODE = 39;
     static private final int DOWNKEYCODE = 40;
     static private final int LEFTKEYCODE = 37;
+    static private final int ACHARKEYCODE = 65;
+    static private final int SCHARKEYCODE = 83;
+    static private final int DCHARKEYCODE = 68;
+    static private final int WCHARKEYCODE = 87;
+    
     
     static private int score = 0;
     static private int speed = 75;
+    static private int counterSpeed = 3;
     static private int highScore = 0;
     static private int lives = 5;
     static private int counter = 0;
-    static private int currentWorld = 1;
+    static private int level = 1;
     static private int restOfFood = 0;
 
 
@@ -58,6 +64,9 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         
         if(snakeEeatenFood()) {
             food.newPosition();
+            if(isByLevels) {
+                restOfFood--;
+            }
             snakeBody[score].setAvailability(true);
             score++;
             Sound.EAT.play();
@@ -119,7 +128,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     }
     
     private static void setHighScore(int score) {
-        if(score > highScore) highScore = score;
+        if(score > highScore && isByScore) highScore = score;
     }
     
     public static int getLives() {
@@ -127,13 +136,16 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     }
     
     public static int getCurrentWorld() {
-        return currentWorld;
+        return level;
     }
     
     public static int getRestOfFood() {
         return restOfFood;
     }
     
+    public static int getCounterSpeed() {
+        return counterSpeed;
+    }
     public static String getOrientation() {
         if(upState)  return "up";
         if(rightState) return "right";
@@ -191,10 +203,14 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         
         food.newPosition();
         changeMoveState(false, false, false, false);
+        
+        if(lives == 0) {
+            level = 1;
+            lives = 5;
+        }
 
         score = 0;
         isStarted = false;
-        lives--;
         isCrashed = true;
     }
       
@@ -217,7 +233,17 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
        
         while(true) {
             game.repaint();
-
+            
+            if(!isStarted) {
+                restOfFood =  level * 2 + 8;
+            }
+            
+            if (restOfFood == 0) {
+                cleanWorld();
+                level++;
+                speed--;
+            }
+           
             if(upState) snakeHead.moveUp();
             if(rightState) snakeHead.moveRight();           
             if(downState) snakeHead.moveDown();                
@@ -227,6 +253,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
                     isTopCrashing() || isLeftCrashing() ||
                     isHeadCrashingBody() || isHeadCrashingTail()) {
                 //JOptionPane.showMessageDialog(game, "Game Over");
+                if(isByLevels) lives--;
                 cleanWorld();
             }
             setHighScore(getScore());
@@ -236,21 +263,21 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        
+        System.out.println(e.getKeyCode());
         if(isStarted) {
-            if(e.getKeyCode() == UPKEYCODE) 
+            if(e.getKeyCode() == UPKEYCODE || e.getKeyCode() == WCHARKEYCODE) 
                 if(!upState && !downState) 
                     changeMoveState(true, false, false, false);    
 
-            if(e.getKeyCode() == RIGHTKEYCODE) 
+            if(e.getKeyCode() == RIGHTKEYCODE || e.getKeyCode() == DCHARKEYCODE) 
                 if(!rightState && !leftState) 
                     changeMoveState(false, true, false, false);
 
-            if(e.getKeyCode() == DOWNKEYCODE) 
+            if(e.getKeyCode() == DOWNKEYCODE || e.getKeyCode() == SCHARKEYCODE) 
                 if(!downState && !upState) 
                     changeMoveState(false, false, true, false);           
                 
-            if(e.getKeyCode() == LEFTKEYCODE) 
+            if(e.getKeyCode() == LEFTKEYCODE || e.getKeyCode() == ACHARKEYCODE) 
                 if(!leftState && !rightState) 
                     changeMoveState(false, false, false, true);
         }
@@ -272,15 +299,50 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     public void mouseClicked(MouseEvent e) {
         int x=e.getX();
         int y=e.getY();
-        
-        if(x >= 450 && x <= 465 && y >= 288 && y <= 303) {
+        // Select by levels Option
+        if(x >= 450 && x <= 465 && y >= 288 && y <= 303 && !isStarted) {
             isByLevels = true;
             isByScore = false;
+            speed = 75;
+            counterSpeed = 3;
         }
-        if(x >= 450 && x <= 465 && y >= 313 && y <= 326) {
+        // Select by score option
+        if(x >= 450 && x <= 465 && y >= 313 && y <= 326 && !isStarted) {
             isByScore = true;
             isByLevels = false;
-        }       
+            speed = 75;
+            counterSpeed = 3;
+        }
+        // Click on speed's levels
+        if(x >= 488 && x <= 503 && y >= 220 && y <= 235 && isByScore) {
+            counterSpeed = 1;
+            speed = 150;
+        }
+        
+        if(x >= 504 && x <= 519 && y >= 220 && y <= 235 && isByScore) {
+            counterSpeed = 2;
+            speed = 110;
+        }
+        
+        if(x >= 520 && x <= 535 && y >= 220 && y <= 235 && isByScore) {
+            counterSpeed = 3;
+            speed = 75;
+        }
+        
+        if(x >= 536 && x <= 551 && y >= 220 && y <= 235 && isByScore) {
+            counterSpeed = 4;
+            speed = 70;
+        }
+        
+        if(x >= 552 && x <= 567 && y >= 220 && y <= 235 && isByScore) {
+            counterSpeed = 5;
+            speed = 60;
+        }
+        
+        if(x >= 568 && x <= 583 && y >= 220 && y <= 235 && isByScore) {
+            counterSpeed = 6;
+            speed = 50;
+        }
     }
     
     @Override

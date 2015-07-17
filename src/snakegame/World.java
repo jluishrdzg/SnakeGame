@@ -14,7 +14,7 @@ public class World {
         paintSpaceMessage(g2d);
         paintScoreOrWolrd(g2d);
         paintHighScoreOrRestFood(g2d);
-        paintLives(g2d);
+        paintLivesOrSpeed(g2d);
         paintTypeOfGame(g2d);
         paintGameInstructions(g2d);
     }
@@ -41,7 +41,7 @@ public class World {
             g2d.drawString("SCORE" , 440, 50); 
             g2d.drawString(String.valueOf(SnakeGame.getScore()), 490, 100);
         } else {
-            g2d.drawString("WORLD" , 435, 50); 
+            g2d.drawString("LEVEL" , 450, 50); 
             g2d.drawString(String.valueOf(SnakeGame.getCurrentWorld()), 490, 100);
         }
     }
@@ -59,12 +59,12 @@ public class World {
 
     }
     
-    private void paintLives(Graphics2D g2d) {
+    private void paintLivesOrSpeed(Graphics2D g2d) {
+        g2d.setColor(Color.black);    
+        g2d.setFont(new Font("Verdana", Font.BOLD, 15));
+        
         if(SnakeGame.isByLevels)
         {
-            g2d.setColor(Color.black);
-
-            g2d.setFont(new Font("Verdana", Font.BOLD, 15));
             g2d.drawString("Lives:" , 420, 208); 
 
             for(int i = SnakeGame.getLives(); i > 0 ; i--) {
@@ -75,8 +75,29 @@ public class World {
                     g2d.fillOval(459 + margin, 196, 8, 7);
                     g2d.fillOval(467 + margin, 196, 8, 7);
             }
+        } else {
+            int speed = SnakeGame.getCounterSpeed();
+            g2d.drawString("Speed:" , 420, 208); 
+            for(int i = 0; i < 6 ; i++) {
+                int margin = 15 * i;
+                 
+                if(speed != 0) {
+                    g2d.setColor(Color.black); 
+                    speed--;
+                } else { g2d.setColor(Color.gray); }
+                g2d.fillRect(485 + margin, 195, 15, 15);
+                g2d.setColor(Color.white); 
+                fillxPoints(485 + margin, 493 + margin, 485 + margin);
+                fillyPoints(195, 202, 210);
+                g2d.fillPolygon(xPoints, yPoints, 3);
+                fillxPoints(493 + margin, 500 + margin, 500 + margin);
+                fillyPoints(195, 195, 202);
+                g2d.fillPolygon(xPoints, yPoints, 3);
+                fillxPoints(493 + margin, 500 + margin, 500 + margin);
+                fillyPoints(210, 202, 210);
+                g2d.fillPolygon(xPoints, yPoints, 3);
+            }
         }
-
     }
     
     private void paintTypeOfGame(Graphics2D g2d) {
@@ -88,7 +109,7 @@ public class World {
         
         g2d.fillRect(450, 264, 15, 15);
         if(SnakeGame.isByLevels) {
-            g2d.setColor(Color.black);
+            g2d.setColor(Color.gray);
         } else {
             g2d.setColor(Color.white);
         }
@@ -96,7 +117,7 @@ public class World {
         g2d.setColor(Color.black);
         g2d.fillRect(450, 288, 15, 15);
         if(SnakeGame.isByScore) {
-            g2d.setColor(Color.black);
+            g2d.setColor(Color.gray);
         } else {
             g2d.setColor(Color.white);
         }
