@@ -17,27 +17,26 @@ public class Food {
         g2d.drawOval(horizontal, vertical, FOODSIZE, FOODSIZE);
     }
     // generates a new postion for the food
-    protected void newPosition() {
+    protected void newPosition() { 
         int randomHorizontal = random.nextInt(381) + 1;
         int randomVertical = random.nextInt(641) + 1;
         
-        while((randomHorizontal - 1) % 20 != 0) {
+        while((randomHorizontal - 1) % 20 != 0) 
             randomHorizontal = random.nextInt(381) + 1;
-        }
-        
-        while((randomVertical - 1) % 20 != 0) {
+
+        while((randomVertical - 1) % 20 != 0) 
             randomVertical = random.nextInt(641) + 1;
-        }
-         
+
         this.horizontal = randomHorizontal;
         this.vertical = randomVertical;
-        
-        // if the food appears on the snake, get other position   
-        for(int i = SnakeGame.getScore(); i >= 0; i--) {
-            if(SnakeGame.snakeBody[i].getBounds().intersects(this.getBounds())) {
+        //if food apperas on a mine, get other position
+        for(int i = SnakeGame.getMinesOnWorld() -1; i >= 0; i--) 
+            if(this.getBounds().intersects(SnakeGame.mines[i].getBounds()) && 1 != 0) 
                 newPosition();
-            } 
-        }
+        // if the food appears on the snake, get other position   
+        for(int i = SnakeGame.getScore(); i >= 0; i--) 
+            if(SnakeGame.snakeBody[i].getBounds().intersects(this.getBounds()))
+                newPosition();
     }
     
     protected Rectangle getBounds() {

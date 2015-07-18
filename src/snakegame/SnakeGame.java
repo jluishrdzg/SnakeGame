@@ -15,6 +15,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     static World world = new World();
     static Food food = new Food();
     static Lives live = new Lives();
+    static Mine [] mines = new Mine [50];
     static SnakeHead snakeHead = new SnakeHead();
     static SnakeBody [] snakeBody = new SnakeBody [100];
     static SnakeTail snakeTail = new SnakeTail();
@@ -53,6 +54,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     static private int highScore = 0;
     static private int lives = 5;
     static private int counter = 0;
+    static private int minesOnWorld = 0;
     static private int level = 1;
     static private int restOfFood = 0;
 
@@ -68,7 +70,11 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         snakeHead.paint(g2d);
         paintSnakeTail(g2d);
         paintSnakeBody(g2d);
-        if(isByLevels) paintLive(g2d);
+        if(isByLevels) {
+            paintLive(g2d);
+            paintMine(g2d);
+        }
+        
         if(snakeEeatenFood()) {
             food.newPosition();
             if(isByLevels) {
@@ -139,6 +145,18 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         }
     }
     
+    public static void paintMine(Graphics2D g2d) {
+        Mine mine = new Mine();
+        if(mine.isGotCoortinates()) {
+            mines[minesOnWorld] = mine;
+            minesOnWorld++; 
+        }
+        
+        for(int i = 0 ; i < minesOnWorld; i++) {
+            mines[i].paint(g2d);
+        }
+    }
+    
     public static int getScore() {
         return score;
     }
@@ -166,6 +184,10 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     public static int getCounterSpeed() {
         return counterSpeed;
     }
+    
+    public static int getMinesOnWorld() {
+        return minesOnWorld;
+    }
     public static String getOrientation() {
         if(upState)  return "up";
         if(rightState) return "right";
@@ -189,6 +211,13 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         return false;
     }
     
+    private static boolean isHeadCrashingMine() {
+        for(int i = minesOnWorld -1; i >= 0; i--) 
+            if(snakeHead.getBounds().intersects(mines[i].getBounds()) && 1 != 0) 
+                return true;
+        return false;
+    }
+    
     public static boolean isHeadCrashingTail() {
         return snakeHead.getBounds().intersects(snakeTail.getBounds()) && score != 0;
     }
@@ -207,7 +236,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     
     public static boolean isTopCrashing() {
         return snakeHead.getVertical() < -1;
-    }
+    }   
     
     public static void changeMoveState(boolean upState, boolean rightState, 
         boolean downState, boolean leftState) {
@@ -237,6 +266,10 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         score = 0;
         isStarted = false;
         isCrashed = true;
+        
+        minesOnWorld = 0;
+        speed = 75;
+        counterSpeed = 3;
     }
       
     public static void  main(String[] args) throws InterruptedException {
@@ -275,7 +308,8 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
 
             if(isRightCrashing() || isBotCrashing() ||
                     isTopCrashing() || isLeftCrashing() ||
-                    isHeadCrashingBody() || isHeadCrashingTail()) {
+                    isHeadCrashingBody() || isHeadCrashingTail() ||
+                    isHeadCrashingMine()) {
                 if(isByLevels) lives--;
                 isFailLevel = true;
                 cleanWorld();
@@ -325,16 +359,14 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         // Select by levels Option
         if(x >= 450 && x <= 465 && y >= 288 && y <= 303 && !isStarted) {
             isByLevels = true;
-            isByScore = false;
-            speed = 75;
-            counterSpeed = 3;
+            isByScore = false;  
+            cleanWorld();
         }
         // Select by score option
         if(x >= 450 && x <= 465 && y >= 313 && y <= 326 && !isStarted) {
             isByScore = true;
             isByLevels = false;
-            speed = 75;
-            counterSpeed = 3;
+            cleanWorld();
         }
         // Click on speed's levels
         if(x >= 488 && x <= 503 && y >= 220 && y <= 235 && isByScore) {
@@ -370,19 +402,14 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     
     @Override
     public void keyReleased(KeyEvent e) {}
-    
     @Override
     public void keyTyped(KeyEvent e) {}
-
     @Override
     public void mousePressed(MouseEvent e) {}
-
     @Override
     public void mouseReleased(MouseEvent e) {}
-
     @Override
     public void mouseEntered(MouseEvent e) {}
-
     @Override
     public void mouseExited(MouseEvent e) {}
 }
