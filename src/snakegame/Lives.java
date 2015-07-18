@@ -41,7 +41,7 @@ public class Lives {
     }
 
     protected void getCoordinates() {
-        int liveProbability = random.nextInt(500);
+        int liveProbability = random.nextInt(400);
         if(liveProbability != 5 || SnakeGame.getLives() >= 5) return;
     
         int randomHorizontal = random.nextInt(381) + 1;
