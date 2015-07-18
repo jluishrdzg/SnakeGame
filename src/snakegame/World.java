@@ -8,6 +8,9 @@ import java.awt.Graphics2D;
 public class World {
     private int [] xPoints = new int [3];
     private int [] yPoints = new int [3];
+    private final int MESSAGESCANT = 7;
+    private Messages [] messages = new Messages [MESSAGESCANT];
+    private int messagesCounter = 0;
     
     public void paint(Graphics2D g2d) {
         paintPlayFrameZone(g2d);
@@ -17,6 +20,7 @@ public class World {
         paintLivesOrSpeed(g2d);
         paintTypeOfGame(g2d);
         paintGameInstructions(g2d);
+        paintMessagesGame(g2d);
     }
     private void paintPlayFrameZone(Graphics2D g2d) {
         g2d.setColor(Color.white);
@@ -163,4 +167,82 @@ public class World {
         yPoints[1] = y2;
         yPoints[2] = y3;
     } 
+
+    private void paintMessagesGame(Graphics2D g2d) {
+        g2d.setFont(new Font("Verdana", Font.BOLD, 10));
+        
+        if(messages[0] == null) {
+            for(int i = 0; i < messages.length; i++)
+                messages[i] = new Messages();
+        }
+        
+        if(SnakeGame.isFinishLevel) {
+            messages[messagesCounter] = new Messages("Great! Level complete",
+                435);
+            orderMessages();
+            messagesCounter++;
+            if(messagesCounter == MESSAGESCANT) messagesCounter = MESSAGESCANT - 1;
+            SnakeGame.isFinishLevel = false;
+        }
+            
+        if(SnakeGame.isFailLevel) {
+            messages[messagesCounter] = new Messages("Be careful the next time",
+                435);
+            orderMessages();
+            messagesCounter++;
+            if(messagesCounter == MESSAGESCANT) messagesCounter = MESSAGESCANT - 1;
+            SnakeGame.isFailLevel = false;
+        }
+        
+        if(SnakeGame.isGameOver) {
+            messages[messagesCounter] = new Messages("GAME OVER",
+                467 );
+            orderMessages();
+            messagesCounter++;
+            if(messagesCounter == MESSAGESCANT) messagesCounter = MESSAGESCANT - 1;
+            SnakeGame.isGameOver = false;  
+        }
+
+        if(SnakeGame.isSnakeTookLive) {
+            messages[messagesCounter] = new Messages("Nice, you have a new chance",
+                420);
+            orderMessages();
+            messagesCounter++;
+            if(messagesCounter == MESSAGESCANT) messagesCounter = MESSAGESCANT - 1;
+            SnakeGame.isSnakeTookLive = false;  
+        }
+        
+        int margin = 0;
+        int R = 0;
+        int G = 0;
+        int B = 0;
+        for(int i = 0; i < messages.length ; i++) {
+            g2d.setColor(new Color(R,G,B));
+            g2d.drawString(messages[i].message, messages[i].horizontal, messages[i].vertical + margin);
+            margin = margin + 15;
+            R = R + 30;
+            G = G + 30;
+            B = G + 30;
+        }
+    }
+    
+    private void orderMessages() {
+        String messageAux = messages[0].message;
+        int horizontalAux = messages[0].horizontal;
+        
+        if(messagesCounter != 0) {
+            messages[0].message = messages[messagesCounter].message;
+            messages[0].horizontal = messages[messagesCounter].horizontal;
+        }
+        
+        for(int i = 1; i < messages.length - 1 ; i++) {
+            if(messages[i].message.compareTo("") == 0) break;
+            String messageAux2 = messages[i].message;
+            int horizontalAux2 = messages[i].horizontal;
+            messages[i].message = messageAux;
+            messages[i].horizontal = horizontalAux;     
+            messageAux = messageAux2;
+            horizontalAux = horizontalAux2;
+        } 
+    }
 }

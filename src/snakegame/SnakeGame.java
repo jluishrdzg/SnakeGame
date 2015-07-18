@@ -32,6 +32,11 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     
     static public boolean isLiveShown = false;
     
+    static public boolean isFinishLevel = false;
+    static public boolean isFailLevel = false;
+    static public boolean isSnakeTookLive = false;
+    static public boolean isGameOver = false;
+    
     static private final int SPACEKEYCODE = 32;
     static private final int UPKEYCODE = 38;
     static private final int RIGHTKEYCODE = 39;
@@ -41,7 +46,6 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
     static private final int SCHARKEYCODE = 83;
     static private final int DCHARKEYCODE = 68;
     static private final int WCHARKEYCODE = 87;
-    
     
     static private int score = 0;
     static private int speed = 75;
@@ -131,6 +135,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
             if(lives != 5) lives++;
             isLiveShown = false;
             live.resetCoordinates();
+            isSnakeTookLive = true;
         }
     }
     
@@ -226,6 +231,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
         if(lives == 0) {
             level = 1;
             lives = 5;
+            isGameOver = true;
         }
 
         score = 0;
@@ -256,6 +262,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
             if(!isStarted) restOfFood =  level * 2 + 8;
  
             if (restOfFood == 0) {
+                isFinishLevel = true;
                 cleanWorld();
                 level++;
                 speed--;
@@ -270,6 +277,7 @@ public class SnakeGame extends JPanel implements KeyListener, MouseListener {
                     isTopCrashing() || isLeftCrashing() ||
                     isHeadCrashingBody() || isHeadCrashingTail()) {
                 if(isByLevels) lives--;
+                isFailLevel = true;
                 cleanWorld();
             }
             setHighScore(getScore());
